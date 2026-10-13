@@ -80,8 +80,9 @@ export async function getFollowerCountSeries({
 }
 
 export async function getZernioFollowerSnapshots(context: ZernioContext) {
+  // Zernio rejects ranges over 89 days (inclusive of both ends) with a 400.
   const until = new Date().toISOString().slice(0, 10);
-  const since = new Date(Date.now() - 90 * 86_400_000)
+  const since = new Date(Date.now() - 88 * 86_400_000)
     .toISOString()
     .slice(0, 10);
   const query = new URLSearchParams({

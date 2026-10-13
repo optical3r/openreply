@@ -192,6 +192,12 @@ it("uses dated follower snapshots without manufacturing missing days", async () 
     metrics: { follower_count: { total: 0, values: [] } },
   });
   expect(await getZernioFollowerSnapshots(context)).toEqual([]);
+  const query = new URL(String(fetchMock.mock.calls.at(-1)?.[0])).searchParams;
+  const days =
+    (Date.parse(query.get("until")!) - Date.parse(query.get("since")!)) /
+      86_400_000 +
+    1;
+  expect(days).toBeLessThanOrEqual(89);
   respond({
     accountId: "selected",
     metrics: {
