@@ -9,6 +9,9 @@ export default defineConfig({
     path: "prisma/migrations",
   },
   datasource: {
-    url: process.env["DATABASE_URL"],
+    // Migrations take an advisory lock, which a transaction-mode pooler (e.g.
+    // Supabase on port 6543) cannot hold. DIRECT_URL points the CLI at a
+    // session-mode or direct connection; the app itself keeps DATABASE_URL.
+    url: process.env["DIRECT_URL"] ?? process.env["DATABASE_URL"],
   },
 });
